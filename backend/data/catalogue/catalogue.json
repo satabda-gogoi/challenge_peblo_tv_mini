@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-05T13:01:23.709732+00:00",
+  "generated_at": "2026-09-05T13:37:02.750557+00:00",
   "version": 1,
-  "shows_count": 8,
+  "shows_count": 9,
   "shows": [
     {
       "id": "show_001",
@@ -293,6 +293,24 @@
           ]
         }
       ]
+    },
+    {
+      "id": "show_025",
+      "raw_id": 25,
+      "title": "Test Show",
+      "slug": "test-show",
+      "synopsis": "Test Show",
+      "section": "featured",
+      "categories": [
+        "adventure"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": []
     },
     {
       "id": "show_003",
@@ -742,8 +760,8 @@
       ]
     },
     {
-      "id": "show_024",
-      "raw_id": 24,
+      "id": "show_032",
+      "raw_id": 32,
       "title": "Interstellar Chronicles: Remastered",
       "slug": "interstellar-chronicles",
       "synopsis": "Updated high-definition remaster with director's commentary.",
@@ -752,9 +770,9 @@
         "Sci-Fi Interstellar"
       ],
       "artwork": {
-        "poster": "https://assets.peblo.test/ic/poster_600x900.jpg",
-        "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
-        "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg"
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
       },
       "trailers": [],
       "seasons": [
@@ -762,30 +780,16 @@
           "season_number": 1,
           "episodes": [
             {
-              "id": 86,
+              "id": 95,
               "source_episode_id": "ic-s01e01-pilot",
               "episode_number": 1,
               "title": "Departure from Sol: Extended",
               "description": "The colony flagship leaves Earth orbit under quantum drive.",
               "duration_seconds": 2940,
-              "content_group": "grp_ep_86",
-              "available_languages": [
-                "en",
-                "hi"
-              ],
-              "languages": {
-                "hi": {
-                  "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
-                },
-                "en": {
-                  "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
-                }
-              },
-              "artwork": {
-                "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
-                "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
-                "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
-              }
+              "content_group": null,
+              "available_languages": [],
+              "languages": {},
+              "artwork": {}
             }
           ]
         }
@@ -2046,6 +2050,24 @@
             ]
           }
         ]
+      },
+      {
+        "id": "show_025",
+        "raw_id": 25,
+        "title": "Test Show",
+        "slug": "test-show",
+        "synopsis": "Test Show",
+        "section": "featured",
+        "categories": [
+          "adventure"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": []
       }
     ],
     "series": [
@@ -2251,8 +2273,8 @@
         ]
       },
       {
-        "id": "show_024",
-        "raw_id": 24,
+        "id": "show_032",
+        "raw_id": 32,
         "title": "Interstellar Chronicles: Remastered",
         "slug": "interstellar-chronicles",
         "synopsis": "Updated high-definition remaster with director's commentary.",
@@ -2261,9 +2283,9 @@
           "Sci-Fi Interstellar"
         ],
         "artwork": {
-          "poster": "https://assets.peblo.test/ic/poster_600x900.jpg",
-          "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
-          "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg"
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
         },
         "trailers": [],
         "seasons": [
@@ -2271,30 +2293,16 @@
             "season_number": 1,
             "episodes": [
               {
-                "id": 86,
+                "id": 95,
                 "source_episode_id": "ic-s01e01-pilot",
                 "episode_number": 1,
                 "title": "Departure from Sol: Extended",
                 "description": "The colony flagship leaves Earth orbit under quantum drive.",
                 "duration_seconds": 2940,
-                "content_group": "grp_ep_86",
-                "available_languages": [
-                  "en",
-                  "hi"
-                ],
-                "languages": {
-                  "hi": {
-                    "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
-                  },
-                  "en": {
-                    "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
-                  }
-                },
-                "artwork": {
-                  "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
-                  "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
-                  "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
-                }
+                "content_group": null,
+                "available_languages": [],
+                "languages": {},
+                "artwork": {}
               }
             ]
           }

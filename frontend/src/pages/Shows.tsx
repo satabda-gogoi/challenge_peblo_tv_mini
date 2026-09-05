@@ -25,7 +25,11 @@ export default function Shows() {
   const [synopsis, setSynopsis] = useState("");
   const [section, setSection] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
-  const [createStatus, setCreateStatus] = useState<"draft" | "published">("published");
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : null;
+  const isAdmin = user?.role === "admin";
+
+  const [createStatus, setCreateStatus] = useState<"draft" | "published">("draft");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -214,16 +218,18 @@ export default function Shows() {
               </select>
             </div>
 
-            <div>
-              <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: 600 }}>Initial Status</label>
-              <select
-                value={createStatus}
-                onChange={(e) => setCreateStatus(e.target.value as "draft" | "published")}
-              >
-                <option value="published">Published (Live Catalogue)</option>
-                <option value="draft">Draft (Work in Progress)</option>
-              </select>
-            </div>
+            {isAdmin && (
+              <div>
+                <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: 600 }}>Initial Status</label>
+                <select
+                  value={createStatus}
+                  onChange={(e) => setCreateStatus(e.target.value as "draft" | "published")}
+                >
+                  <option value="draft">Draft (Work in Progress)</option>
+                  <option value="published">Published (Live Catalogue)</option>
+                </select>
+              </div>
+            )}
           </div>
 
           <div style={{ marginBottom: "16px" }}>
@@ -310,14 +316,20 @@ export default function Shows() {
               </div>
             </div>
             <div>
-              <button
-                type="button"
-                onClick={() => handleToggleStatus(show)}
-                title={`Click to switch to ${show.status === "published" ? "draft" : "published"}`}
-                className={`status-badge ${show.status} cursor-pointer hover:opacity-85 transition`}
-              >
-                {show.status === "published" ? "✓ Published" : "✎ Draft"}
-              </button>
+              {isAdmin ? (
+                <button
+                  type="button"
+                  onClick={() => handleToggleStatus(show)}
+                  title={`Click to switch to ${show.status === "published" ? "draft" : "published"}`}
+                  className={`status-badge ${show.status} cursor-pointer hover:opacity-85 transition`}
+                >
+                  {show.status === "published" ? "✓ Published" : "✎ Draft"}
+                </button>
+              ) : (
+                <span className={`status-badge ${show.status}`}>
+                  {show.status}
+                </span>
+              )}
             </div>
             <div className="table-actions">
               <button

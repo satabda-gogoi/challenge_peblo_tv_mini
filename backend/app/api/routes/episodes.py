@@ -5,12 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.dependencies import get_current_editor
 from app.core.database import get_db
 from app.models import Episode, Season, User
-from app.models.enums import EpisodeStatus
+from app.models.enums import EpisodeStatus, UserRole
 from app.schemas.episode import (
     EpisodeCreate,
     EpisodeResponse,
     EpisodeUpdate,
 )
+from app.services.catalogue import sync_published_catalogue
 
 
 router = APIRouter(tags=["Episodes"])
@@ -117,7 +118,7 @@ async def create_episode(
             )
 
     initial_status = EpisodeStatus.DRAFT
-    if data.status:
+    if current_user.role == UserRole.ADMIN and data.status:
         try:
             initial_status = EpisodeStatus(data.status)
         except ValueError:
@@ -139,6 +140,12 @@ async def create_episode(
     db.add(episode)
     await db.commit()
     await db.refresh(episode)
+
+    if episode.status == EpisodeStatus.PUBLISHED and current_user.role == UserRole.ADMIN:
+        try:
+            await sync_published_catalogue(db, current_user.id)
+        except Exception:
+            pass
 
     return episode
 
@@ -207,7 +214,12 @@ async def update_episode(
     if data.duration_seconds is not None:
         episode.duration_seconds = data.duration_seconds
 
-    if data.status is not None:
+    if data.status is not None and data.status != episode.status.value:
+        if current_user.role != UserRole.ADMIN:
+            raise HTTPException(
+                status_code=403,
+                detail="Only administrators can update episode publishing status",
+            )
         try:
             episode.status = EpisodeStatus(data.status)
         except ValueError:
@@ -218,6 +230,12 @@ async def update_episode(
 
     await db.commit()
     await db.refresh(episode)
+
+    if episode.status == EpisodeStatus.PUBLISHED and current_user.role == UserRole.ADMIN:
+        try:
+            await sync_published_catalogue(db, current_user.id)
+        except Exception:
+            pass
 
     return episode
 

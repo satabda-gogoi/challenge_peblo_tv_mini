@@ -61,6 +61,10 @@ export default function EpisodeEditor() {
   const [episodeNumber, setEpisodeNumber] = useState("");
   const [sourceEpisodeId, setSourceEpisodeId] = useState("");
   const [duration, setDuration] = useState("");
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : null;
+  const isAdmin = user?.role === "admin";
+
   const [status, setStatus] = useState("draft");
 
   const [language, setLanguage] = useState("en");
@@ -393,20 +397,22 @@ export default function EpisodeEditor() {
               />
             </div>
 
-            <div>
-              <label>Status</label>
-              <select
-                value={status}
-                onChange={(e) =>
-                  setStatus(e.target.value)
-                }
-              >
-                <option value="draft">Draft</option>
-                <option value="published">
-                  Published
-                </option>
-              </select>
-            </div>
+            {isAdmin && (
+              <div>
+                <label>Status</label>
+                <select
+                  value={status}
+                  onChange={(e) =>
+                    setStatus(e.target.value)
+                  }
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">
+                    Published
+                  </option>
+                </select>
+              </div>
+            )}
           </div>
 
           <label>Description</label>

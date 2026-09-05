@@ -123,11 +123,13 @@ async def generate_catalogue(db: AsyncSession) -> dict:
     }
 
     for s in catalogue_shows:
-        sec = s.get("section")
+        sec = (s.get("section") or "").strip().lower()
         if sec in sections_map:
             sections_map[sec].append(s)
+        elif sec:
+            sections_map.setdefault(sec, []).append(s)
         else:
-            sections_map.setdefault(sec or "other", []).append(s)
+            sections_map["featured"].append(s)
 
     return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -136,3 +138,46 @@ async def generate_catalogue(db: AsyncSession) -> dict:
         "shows": catalogue_shows,
         "sections": sections_map,
     }
+
+
+async def sync_published_catalogue(db: AsyncSession, user_id: int | None = None) -> dict:
+    """
+    Auto-regenerates and replaces catalogue.json whenever a show or episode status changes to published.
+    Also updates or creates a PublishRun record in DB so API viewers receive real-time updates.
+    """
+    from pathlib import Path
+    import json
+    from app.models import PublishRun
+    from app.models.enums import PublishOutcome
+
+    catalogue_dir = Path(__file__).resolve().parents[2] / "data" / "catalogue"
+    catalogue_dir.mkdir(parents=True, exist_ok=True)
+
+    catalogue = await generate_catalogue(db)
+    json_data = json.dumps(catalogue, indent=2, ensure_ascii=False)
+
+    live_path = catalogue_dir / "catalogue.json"
+    temp_path = catalogue_dir / "catalogue.json.tmp"
+    temp_path.write_text(json_data, encoding="utf-8")
+    temp_path.replace(live_path)
+
+    shows_count = len(catalogue["shows"])
+    episodes_count = sum(
+        len(season["episodes"])
+        for show in catalogue["shows"]
+        for season in show["seasons"]
+    )
+
+    publish_run = PublishRun(
+        published_by=user_id or 1,
+        started_at=datetime.now(timezone.utc),
+        completed_at=datetime.now(timezone.utc),
+        outcome=PublishOutcome.SUCCESS,
+        shows_count=shows_count,
+        episodes_count=episodes_count,
+        catalogue_uri=str(live_path.resolve()),
+    )
+    db.add(publish_run)
+    await db.commit()
+
+    return catalogue

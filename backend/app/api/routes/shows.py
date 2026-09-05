@@ -5,9 +5,10 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.models import Category, Show, User
-from app.models.enums import ShowStatus
+from app.models.enums import ShowStatus, UserRole
 from app.schemas.show import ShowCreate, ShowResponse, ShowUpdate
 from app.api.dependencies import get_current_editor
+from app.services.catalogue import sync_published_catalogue
 
 
 router = APIRouter(prefix="/shows", tags=["Shows"])
@@ -72,7 +73,7 @@ async def get_show(
         categories=[category.name for category in show.categories],
     )
     
-@router.post("", response_model=ShowResponse)
+@router.post("", response_model=ShowResponse, status_code=201)
 async def create_show(
     data: ShowCreate,
     db: AsyncSession = Depends(get_db),
@@ -89,9 +90,9 @@ async def create_show(
             detail="A show with this slug already exists",
         )
 
-    # Determine show status
+    # Determine show status (Editors can only create DRAFT shows; only Admins can set PUBLISHED)
     initial_status = ShowStatus.DRAFT
-    if data.status:
+    if current_user.role == UserRole.ADMIN and data.status:
         try:
             initial_status = ShowStatus(data.status)
         except ValueError:
@@ -218,7 +219,12 @@ async def update_show(
 
         show.categories = categories
 
-    if data.status is not None:
+    if data.status is not None and data.status != show.status.value:
+        if current_user.role != UserRole.ADMIN:
+            raise HTTPException(
+                status_code=403,
+                detail="Only administrators can update show status to published",
+            )
         try:
             show.status = ShowStatus(data.status)
         except ValueError:
@@ -228,6 +234,12 @@ async def update_show(
             )
 
     await db.commit()
+
+    if show.status == ShowStatus.PUBLISHED and current_user.role == UserRole.ADMIN:
+        try:
+            await sync_published_catalogue(db, current_user.id)
+        except Exception:
+            pass
 
     # Reload relationships
     result = await db.execute(
