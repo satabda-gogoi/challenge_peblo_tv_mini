@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: peblo_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-peblo_catalogue}
+      POSTGRES_USER: ${POSTGRES_USER:-peblo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-peblo_secure_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-peblo} -d ${POSTGRES_DB:-peblo_catalogue}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: peblo_backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-peblo}:${POSTGRES_PASSWORD:-peblo_secure_pass}@db:5432/${POSTGRES_DB:-peblo_catalogue}
+      JWT_SECRET: ${JWT_SECRET:-production-jwt-secret-peblo-tv-mini}
+      ENVIRONMENT: production
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-local}
+      MEDIA_DIR: /app/data/catalogue/uploads
+      R2_ACCOUNT_ID: ${R2_ACCOUNT_ID:-}
+      R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
+      R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
+      R2_BUCKET_NAME: ${R2_BUCKET_NAME:-peblo-catalogue}
+      R2_PUBLIC_URL: ${R2_PUBLIC_URL:-https://assets.peblo.tv}
+    ports:
+      - "8000:8000"
+    volumes:
+      - catalogue_data:/app/data/catalogue
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: peblo_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  catalogue_data:
