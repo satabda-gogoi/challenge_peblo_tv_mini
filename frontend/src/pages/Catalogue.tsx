@@ -276,8 +276,8 @@ export default function CataloguePage() {
         )}
 
         {/* 2. CONTROLS: SEARCH & COMPOSABLE FILTERS */}
-        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4 md:p-5 backdrop-blur-md space-y-4">
-          <div className="flex flex-col md:flex-row gap-3">
+        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-4 md:p-5 backdrop-blur-md space-y-3.5">
+          <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
             {/* Search Input */}
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -285,12 +285,13 @@ export default function CataloguePage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search shows, synopsis, categories, or episodes..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 transition"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-9 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-hidden focus:border-indigo-500 transition"
               />
               {search && (
                 <button
+                  type="button"
                   onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -298,24 +299,26 @@ export default function CataloguePage() {
             </div>
 
             {/* Category Dropdown Filter */}
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-hidden focus:border-indigo-500 transition"
-            >
-              <option value="all">All Categories</option>
-              {categories.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            <div className="shrink-0">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full md:w-auto bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-hidden focus:border-indigo-500 transition cursor-pointer"
+              >
+                <option value="all">All Categories ({categories.length})</option>
+                {categories.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Language Stream Filter */}
-            <div className="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 gap-1">
+            <div className="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 gap-1 shrink-0">
               <button
                 type="button"
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer ${
                   languageFilter === "all"
                     ? "bg-indigo-600 text-white shadow-xs"
                     : "text-slate-400 hover:text-slate-200"
@@ -326,7 +329,7 @@ export default function CataloguePage() {
               </button>
               <button
                 type="button"
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer ${
                   languageFilter === "en"
                     ? "bg-indigo-600 text-white shadow-xs"
                     : "text-slate-400 hover:text-slate-200"
@@ -337,7 +340,7 @@ export default function CataloguePage() {
               </button>
               <button
                 type="button"
-                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer ${
                   languageFilter === "hi"
                     ? "bg-indigo-600 text-white shadow-xs"
                     : "text-slate-400 hover:text-slate-200"
@@ -349,18 +352,19 @@ export default function CataloguePage() {
             </div>
           </div>
 
-          {/* Filter Pills */}
+          {/* Horizontal Scrollable Category Pills Rail */}
           {categories.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-slate-800">
               <button
-                className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+                type="button"
+                className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition cursor-pointer shrink-0 ${
                   category === "all"
-                    ? "bg-indigo-600 text-white"
+                    ? "bg-indigo-600 text-white shadow-xs"
                     : "bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
                 }`}
                 onClick={() => setCategory("all")}
               >
-                All Shows ({catalogue.shows.length})
+                All ({catalogue.shows.length})
               </button>
               {categories.map((cat) => {
                 const count = catalogue.shows.filter((s) =>
@@ -370,9 +374,10 @@ export default function CataloguePage() {
                 return (
                   <button
                     key={cat}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition ${
+                    type="button"
+                    className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition cursor-pointer shrink-0 ${
                       active
-                        ? "bg-indigo-600 text-white"
+                        ? "bg-indigo-600 text-white shadow-xs"
                         : "bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
                     }`}
                     onClick={() => setCategory(cat)}
