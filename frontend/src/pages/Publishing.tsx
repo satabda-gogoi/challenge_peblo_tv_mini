@@ -271,7 +271,7 @@ export default function Publishing() {
               : validation.valid
               ? "Ready to Publish"
               : validation.shows.length === 0
-              ? "No Published Shows"
+              ? "No Shows Yet"
               : "Needs Fixes"}
           </strong>
         </div>
@@ -323,7 +323,7 @@ export default function Publishing() {
           {validation && !validation.valid && (
             <span className="text-xs text-slate-500">
               {validation.shows.length === 0
-                ? "No published shows to publish"
+                ? "No shows yet — create shows first"
                 : `Fix ${errorCount} error${errorCount !== 1 ? "s" : ""} to enable publishing`}
             </span>
           )}
@@ -430,16 +430,17 @@ export default function Publishing() {
         {/* Pre-publish requirements hint */}
         {validation && !validation.valid && (
           <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs leading-relaxed space-y-1">
-            <p className="font-semibold">Each published show must meet ALL of these requirements before the catalogue can be published:</p>
+            <p className="font-semibold">Each show must meet ALL of these requirements before the catalogue can be published:</p>
             <ul className="list-disc ml-4 space-y-0.5 text-rose-700">
               <li>At least <strong>one season</strong> (season number ≥ 1)</li>
-              <li>At least <strong>one published episode</strong> in that season</li>
-              <li>Each published episode needs a <strong>positive duration</strong>, <strong>video stream</strong>, and <strong>3 artworks</strong> (poster 600×900, banner 1280×720, thumbnail 640×360)</li>
+              <li>At least <strong>one episode</strong> in that season</li>
+              <li>Each episode needs a <strong>positive duration</strong>, <strong>video stream</strong>, and <strong>3 artworks</strong> (poster 600×900, banner 1280×720, thumbnail 640×360)</li>
               <li>Show must have a <strong>valid section</strong> (featured / series / minisodes / songs) and at least <strong>one category</strong></li>
             </ul>
             <p className="text-rose-600 mt-1">Fix the issues below, then click <strong>Validate Catalogue</strong> to re-check before publishing.</p>
           </div>
         )}
+
 
         {!validation && (
           <p className="muted">
@@ -449,9 +450,9 @@ export default function Publishing() {
 
         {validation && validation.shows.length === 0 && (
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-sm text-center">
-            <p className="font-medium">No published shows found.</p>
+            <p className="font-medium">No shows found.</p>
             <p className="text-xs text-slate-500 mt-1">
-              Mark at least one show as <strong>Published</strong> in{" "}
+              Create shows, seasons, and episodes in{" "}
               <button
                 onClick={() => navigate("/shows")}
                 className="underline text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer"

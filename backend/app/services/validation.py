@@ -8,7 +8,7 @@ from app.models import (
     Episode,
     ContentGroup,
 )
-from app.models.enums import ShowStatus, EpisodeStatus
+from app.models.enums import ShowStatus
 
 
 VALID_SECTIONS = {
@@ -275,7 +275,7 @@ async def validate_show(
             ),
         })
 
-    published_episodes = []
+    all_episodes = []
 
     # ---------------------------------------------------------
     # EPISODES
@@ -285,11 +285,8 @@ async def validate_show(
 
         for episode in season.episodes:
 
-            # Draft episodes do not block publishing.
-            if episode.status != EpisodeStatus.PUBLISHED:
-                continue
-
-            published_episodes.append(episode)
+            # Publish run promotes ALL episodes, so validate regardless of draft/published status
+            all_episodes.append(episode)
 
             # Duration
             if (
@@ -422,19 +419,23 @@ async def validate_show(
                     })
 
     # ---------------------------------------------------------
-    # PUBLISHED SHOW MUST HAVE PUBLISHED EPISODE
+    # SHOW MUST HAVE AT LEAST ONE EPISODE (in any season >= 1)
     # ---------------------------------------------------------
 
-    if (
-        show.status == ShowStatus.PUBLISHED
-        and not published_episodes
-    ):
+    regular_season_episodes = [
+        ep
+        for season in show.seasons
+        for ep in season.episodes
+        if season.season_number > 0
+    ]
+
+    if not regular_season_episodes:
         errors.append({
             "level": "error",
             "field": "episodes",
             "message": (
-                "Published show must have at least "
-                "one published episode"
+                "Show must have at least one episode "
+                "in a regular season (season number ≥ 1)"
             ),
         })
 
@@ -445,23 +446,31 @@ async def validate_show(
     }
 
 
+
 async def validate_all(
     db: AsyncSession,
 ) -> dict:
     """
-    Validate all published shows for publishing.
+    Validate all shows (draft and published) for a pre-publish check.
 
-    Draft shows are ignored.
-    Draft episodes are ignored.
+    The publish run promotes ALL shows and episodes to PUBLISHED, so we
+    validate everything — draft status does not exempt a show from checks.
+    Returns valid=False only when there are blocking errors OR no shows exist.
     """
 
     result = await db.execute(
         select(Show)
-        .where(Show.status == ShowStatus.PUBLISHED)
         .order_by(Show.id)
     )
 
     shows = result.scalars().all()
+
+    if not shows:
+        return {
+            "valid": False,
+            "shows": [],
+            "errors": [{"level": "error", "field": "shows", "message": "No shows found. Create at least one show with seasons and episodes before publishing."}],
+        }
 
     validated_shows = []
     all_errors = []
@@ -488,7 +497,7 @@ async def validate_all(
         )
 
     return {
-        "valid": len(all_errors) == 0 and len(validated_shows) > 0,
+        "valid": len(all_errors) == 0,
         "shows": validated_shows,
         "errors": all_errors,
     }
