@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-09-05T04:11:29.320039+00:00",
+  "version": 1,
+  "shows": [
+    {
+      "id": "show_014",
+      "title": "Interstellar Chronicles: Remastered",
+      "slug": "interstellar-chronicles",
+      "synopsis": "Updated high-definition remaster with director's commentary.",
+      "section": "series",
+      "categories": [
+        "Sci-Fi Interstellar"
+      ],
+      "seasons": [
+        {
+          "season_number": 1,
+          "episodes": [
+            {
+              "episode_number": 1,
+              "title": "Departure from Sol: Extended",
+              "duration_seconds": 2940,
+              "languages": {
+                "hi": {
+                  "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
+                },
+                "en": {
+                  "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
+                }
+              },
+              "artwork": {
+                "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+                "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
+                "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
