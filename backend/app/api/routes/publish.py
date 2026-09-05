@@ -175,3 +175,59 @@ async def get_publish_run(
         )
 
     return publish_run
+
+
+@router.post(
+    "/unpublish",
+    response_model=PublishResponse,
+)
+async def unpublish_catalogue(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_admin),
+):
+    started_at = datetime.now(timezone.utc)
+
+    # 1. Update DB records: revert all Shows and Episodes to DRAFT
+    from app.models import Episode, Show
+    from app.models.enums import EpisodeStatus, ShowStatus
+    from sqlalchemy import update
+
+    await db.execute(update(Show).values(status=ShowStatus.DRAFT))
+    await db.execute(update(Episode).values(status=EpisodeStatus.DRAFT))
+
+    # 2. Update previous SUCCESS runs to FAILED so get_catalogue doesn't serve old releases
+    runs_result = await db.execute(
+        select(PublishRun).where(PublishRun.outcome == PublishOutcome.SUCCESS)
+    )
+    for run in runs_result.scalars().all():
+        run.outcome = PublishOutcome.FAILED
+        run.error_message = "Unpublished by administrator"
+
+    # 3. Add a new PublishRun record for the unpublish action
+    publish_run = PublishRun(
+        published_by=current_user.id,
+        started_at=started_at,
+        completed_at=datetime.now(timezone.utc),
+        outcome=PublishOutcome.FAILED,
+        shows_count=0,
+        episodes_count=0,
+        error_message="Catalogue unpublished by administrator",
+    )
+    db.add(publish_run)
+    await db.commit()
+    await db.refresh(publish_run)
+
+    # 4. Remove live catalogue.json file
+    live_catalogue_path = CATALOGUE_DIR / "catalogue.json"
+    if live_catalogue_path.exists():
+        live_catalogue_path.unlink()
+
+    return PublishResponse(
+        publish_run_id=publish_run.id,
+        outcome="unpublished",
+        shows_count=0,
+        episodes_count=0,
+        catalogue_uri=None,
+        error_message=None,
+    )
+

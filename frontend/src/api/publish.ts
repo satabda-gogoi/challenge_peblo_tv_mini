@@ -27,6 +27,12 @@ export async function publishCatalogue(): Promise<PublishResponse> {
   return response.data;
 }
 
+export async function unpublishCatalogue(): Promise<PublishResponse> {
+  const response = await api.post<PublishResponse>("/publish/unpublish");
+  return response.data;
+}
+
+
 export async function getPublishRuns(): Promise<PublishRun[]> {
   const response = await api.get<PublishRun[]>("/publish/runs");
   return response.data;

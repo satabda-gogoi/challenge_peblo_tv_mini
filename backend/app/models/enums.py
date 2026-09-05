@@ -25,3 +25,4 @@ class ArtworkType(str, Enum):
 class PublishOutcome(str, Enum):
     SUCCESS = "success"
     FAILED = "failed"
+

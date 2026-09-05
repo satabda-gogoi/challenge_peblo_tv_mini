@@ -10,10 +10,12 @@ import {
   History,
   ShieldAlert,
   Info,
+  RotateCcw,
 } from "lucide-react";
 
 import {
   publishCatalogue,
+  unpublishCatalogue,
   getPublishRuns,
   type PublishResponse,
   type PublishRun,
@@ -40,6 +42,7 @@ export default function Publishing() {
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [unpublishing, setUnpublishing] = useState(false);
 
   const [result, setResult] =
     useState<PublishResponse | null>(null);
@@ -119,8 +122,7 @@ export default function Publishing() {
 
       setResult(data);
 
-      const updatedRuns = await getPublishRuns();
-      setRuns(updatedRuns);
+      await loadData();
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data
@@ -130,6 +132,35 @@ export default function Publishing() {
       setPublishing(false);
     }
   }
+
+  async function handleUnpublish() {
+    if (
+      !window.confirm(
+        "Are you sure you want to unpublish the live catalogue? All published content will revert to Draft mode and be removed from the public viewer catalogue."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setUnpublishing(true);
+      setError("");
+      setResult(null);
+
+      const data = await unpublishCatalogue();
+      setResult(data);
+
+      await loadData();
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { detail?: string } } })?.response?.data
+          ?.detail || "Unpublishing failed.";
+      setError(msg);
+    } finally {
+      setUnpublishing(false);
+    }
+  }
+
 
   if (loading) {
     return (
@@ -258,7 +289,7 @@ export default function Publishing() {
       </div>
 
       {/* ACTIONS */}
-      <div className="publish-actions">
+      <div className="publish-actions flex flex-wrap items-center gap-3">
         <button
           className="secondary-button inline-flex items-center gap-2"
           onClick={handleValidate}
@@ -274,13 +305,22 @@ export default function Publishing() {
           className="primary-button inline-flex items-center gap-2"
           onClick={handlePublish}
           disabled={
-            publishing || !validation?.valid
+            publishing || unpublishing || !validation?.valid
           }
         >
           <Upload className={`w-4 h-4 ${publishing ? "animate-bounce" : ""}`} />
           {publishing
             ? "Publishing..."
             : "Publish Catalogue"}
+        </button>
+
+        <button
+          className="px-4 py-2 text-sm font-semibold rounded-xl bg-rose-600 hover:bg-rose-700 text-white transition shadow-xs inline-flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+          onClick={handleUnpublish}
+          disabled={unpublishing || publishing}
+        >
+          <RotateCcw className={`w-4 h-4 ${unpublishing ? "animate-spin" : ""}`} />
+          {unpublishing ? "Unpublishing..." : "Unpublish Catalogue (Revert to Draft)"}
         </button>
       </div>
 
@@ -290,13 +330,19 @@ export default function Publishing() {
           className={
             result.outcome === "success"
               ? "publish-success"
+              : result.outcome === "unpublished"
+              ? "p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 mb-6 shadow-xs"
               : "publish-failure"
           }
         >
-          <h2 className="flex items-center gap-2">
+          <h2 className="flex items-center gap-2 font-bold text-base">
             {result.outcome === "success" ? (
               <>
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" /> Catalogue Published Successfully
+              </>
+            ) : result.outcome === "unpublished" ? (
+              <>
+                <RotateCcw className="w-5 h-5 text-amber-600" /> Catalogue Unpublished & Reverted to Draft
               </>
             ) : (
               <>
@@ -305,38 +351,47 @@ export default function Publishing() {
             )}
           </h2>
 
-          <p>
-            Shows: <strong>{result.shows_count}</strong>
-          </p>
-
-          <p>
-            Episodes:{" "}
-            <strong>{result.episodes_count}</strong>
-          </p>
-
-          {result.catalogue_uri && (
-            <p>
-              Catalogue:{" "}
-              <code>{result.catalogue_uri}</code>
+          {result.outcome === "unpublished" ? (
+            <p className="mt-2 text-sm text-amber-800 leading-relaxed">
+              The live content catalogue has been unpublished and all content reverted to Draft status. Viewers will see the "No Published Catalogue Yet" state until the next publish run.
             </p>
-          )}
+          ) : (
+            <>
+              <p>
+                Shows: <strong>{result.shows_count}</strong>
+              </p>
 
-          {result.error_message && (
-            <p>{result.error_message}</p>
-          )}
+              <p>
+                Episodes:{" "}
+                <strong>{result.episodes_count}</strong>
+              </p>
 
-          {result.outcome === "success" && (
-            <div style={{ marginTop: "16px" }}>
-              <button
-                className="primary-button inline-flex items-center gap-1.5"
-                onClick={() => navigate("/catalogue")}
-              >
-                View Live Catalogue <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+              {result.catalogue_uri && (
+                <p>
+                  Catalogue:{" "}
+                  <code>{result.catalogue_uri}</code>
+                </p>
+              )}
+
+              {result.error_message && (
+                <p>{result.error_message}</p>
+              )}
+
+              {result.outcome === "success" && (
+                <div style={{ marginTop: "16px" }}>
+                  <button
+                    className="primary-button inline-flex items-center gap-1.5"
+                    onClick={() => navigate("/catalogue")}
+                  >
+                    View Live Catalogue <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
+
 
       {/* VALIDATION DETAILS */}
       <div className="editor-card">
