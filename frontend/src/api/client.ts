@@ -19,12 +19,16 @@ const api = axios.create({
 });
 
 export function getMediaUrl(uri: string | null | undefined): string {
-  if (!uri) return "";
+  if (!uri || uri.startsWith("seed://")) return "";
   if (uri.startsWith("http://") || uri.startsWith("https://")) return uri;
   const base = import.meta.env.VITE_API_URL
     ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "")
     : (typeof window !== "undefined" && window.location.port === "5173" ? "http://127.0.0.1:8000" : "");
   return `${base}${uri.startsWith("/") ? "" : "/"}${uri}`;
+}
+
+export function isSeedUri(uri: string | null | undefined): boolean {
+  return typeof uri === "string" && uri.startsWith("seed://");
 }
 
 api.interceptors.request.use((config) => {
