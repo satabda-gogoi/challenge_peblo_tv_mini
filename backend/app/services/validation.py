@@ -143,7 +143,17 @@ async def validate_episode(
         for artwork in episode.artworks
     }
 
-    for artwork_type, dimensions in REQUIRED_ARTWORKS.items():
+    # Check if episode is a Season 0 trailer (which only requires thumbnail)
+    is_trailer = False
+    if episode.season_id:
+        season_res = await db.execute(select(Season).where(Season.id == episode.season_id))
+        s_obj = season_res.scalar_one_or_none()
+        if s_obj and s_obj.season_number == 0:
+            is_trailer = True
+
+    req_artworks = {"thumbnail": REQUIRED_ARTWORKS["thumbnail"]} if is_trailer else REQUIRED_ARTWORKS
+
+    for artwork_type, dimensions in req_artworks.items():
 
         artwork = artwork_by_type.get(artwork_type)
 
@@ -355,7 +365,14 @@ async def validate_show(
                 for artwork in episode.artworks
             }
 
-            for artwork_type, dimensions in REQUIRED_ARTWORKS.items():
+            # Season 0 (trailers) only requires thumbnail; normal episodes require poster, banner, thumbnail
+            req_artworks = (
+                {"thumbnail": REQUIRED_ARTWORKS["thumbnail"]}
+                if season.season_number == 0
+                else REQUIRED_ARTWORKS
+            )
+
+            for artwork_type, dimensions in req_artworks.items():
 
                 artwork = artwork_by_type.get(artwork_type)
 

@@ -198,7 +198,8 @@ async def delete_artwork(
 async def upload_artwork(
     episode_id: int,
     file: UploadFile = File(...),
-    type: str = Form(...),
+    type: str | None = Form(None),
+    artwork_type: str | None = Form(None),
     alt_text: str | None = Form(None),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_editor),
@@ -213,13 +214,19 @@ async def upload_artwork(
     if result.scalar_one_or_none() is None:
         raise HTTPException(status_code=404, detail="Episode not found")
 
-    clean_type = type.lower().strip()
+    clean_type = (type or artwork_type or "").lower().strip()
+    if not clean_type:
+        raise HTTPException(
+            status_code=422,
+            detail="Field 'type' or 'artwork_type' is required",
+        )
+
     try:
         art_type_enum = ArtworkType(clean_type)
     except ValueError:
         raise HTTPException(
             status_code=422,
-            detail=f"Invalid artwork type '{type}'. Allowed types: poster, banner, thumbnail",
+            detail=f"Invalid artwork type '{clean_type}'. Allowed types: poster, banner, thumbnail",
         )
 
     # Read and validate image

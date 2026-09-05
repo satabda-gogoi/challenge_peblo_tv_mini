@@ -27,6 +27,9 @@ yarn-debug.log*
 *.db
 backend/data/catalogue/dev.db
 backend/data/catalogue/catalogue.json.tmp
+backend/data/catalogue/catalogue_*.json
+backend/data/catalogue/uploads/*
+!backend/data/catalogue/uploads/.gitkeep
 
 # Keep seed data and sample test assets
 !backend/data/images/

@@ -67,6 +67,7 @@ export async function uploadEpisodeArtwork(
 ): Promise<Artwork> {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("type", artworkType);
   formData.append("artwork_type", artworkType);
   if (altText) {
     formData.append("alt_text", altText);
