@@ -1,0 +1,27 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "dev-satabda", email = "dev.satabda@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.19.1",
+    "fastapi[standard]>=0.141.1",
+    "playwright>=1.62.0",
+    "psycopg>=3.3.5",
+    "pwdlib[argon2]>=0.3.1",
+    "pyjwt>=2.13.0",
+    "sqlalchemy>=2.0.52",
+    "pillow>=11.0.0",
+    "python-multipart>=0.0.18",
+]
+
+[project.scripts]
+backend = "backend:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"
