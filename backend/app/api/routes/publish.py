@@ -79,6 +79,15 @@ async def publish_catalogue(
             error_message=publish_run.error_message,
         )
 
+    # Promote DB records to PUBLISHED status during Admin publish run
+    from app.models import Episode, Show
+    from app.models.enums import EpisodeStatus, ShowStatus
+    from sqlalchemy import update
+
+    await db.execute(update(Show).values(status=ShowStatus.PUBLISHED))
+    await db.execute(update(Episode).values(status=EpisodeStatus.PUBLISHED))
+    await db.commit()
+
     # Generate catalogue
     catalogue = await generate_catalogue(db)
 

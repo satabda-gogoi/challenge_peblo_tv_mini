@@ -235,12 +235,6 @@ async def update_show(
 
     await db.commit()
 
-    if show.status == ShowStatus.PUBLISHED and current_user.role == UserRole.ADMIN:
-        try:
-            await sync_published_catalogue(db, current_user.id)
-        except Exception:
-            pass
-
     # Reload relationships
     result = await db.execute(
         select(Show)

@@ -34,7 +34,6 @@ async def generate_catalogue(db: AsyncSession) -> dict:
             .selectinload(Season.episodes)
             .selectinload(Episode.artworks),
         )
-        .where(Show.status == ShowStatus.PUBLISHED)
         .order_by(Show.section, Show.title)
     )
 
@@ -48,16 +47,14 @@ async def generate_catalogue(db: AsyncSession) -> dict:
 
         # Sort seasons deterministically by season number
         for season in sorted(show.seasons, key=lambda s: s.season_number):
-            published_episodes = [
-                ep for ep in season.episodes if ep.status == EpisodeStatus.PUBLISHED
-            ]
+            episodes_list = season.episodes
 
-            if not published_episodes:
+            if not episodes_list:
                 continue
 
             catalogue_episodes = []
 
-            for episode in sorted(published_episodes, key=lambda e: e.episode_number):
+            for episode in sorted(episodes_list, key=lambda e: e.episode_number):
                 languages = {}
                 if episode.content_group:
                     for content in episode.content_group.contents:

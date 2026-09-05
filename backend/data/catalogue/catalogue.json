@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-05T13:37:02.750557+00:00",
+  "generated_at": "2026-09-05T14:02:31.991090+00:00",
   "version": 1,
-  "shows_count": 9,
+  "shows_count": 16,
   "shows": [
     {
       "id": "show_001",
@@ -295,8 +295,45 @@
       ]
     },
     {
-      "id": "show_025",
-      "raw_id": 25,
+      "id": "show_022",
+      "raw_id": 22,
+      "title": "Professor paws and the cloud cat",
+      "slug": "propessor-paws",
+      "synopsis": "Main Characters: Professor paws and a playful cat\nThe setting: a cozy treehouse\nThe adventure: Everyday\nThe goal: They help other animals",
+      "section": "featured",
+      "categories": [
+        "adventure",
+        "friendship"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": [
+        {
+          "season_number": 1,
+          "episodes": [
+            {
+              "id": 85,
+              "source_episode_id": "ep-1-1",
+              "episode_number": 1,
+              "title": "Something",
+              "description": null,
+              "duration_seconds": null,
+              "content_group": null,
+              "available_languages": [],
+              "languages": {},
+              "artwork": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "show_033",
+      "raw_id": 33,
       "title": "Test Show",
       "slug": "test-show",
       "synopsis": "Test Show",
@@ -309,8 +346,51 @@
         "banner": null,
         "thumbnail": null
       },
-      "trailers": [],
-      "seasons": []
+      "trailers": [
+        {
+          "id": 96,
+          "source_episode_id": "ep-0-1",
+          "episode_number": 1,
+          "title": "Trailer",
+          "description": "test trailer",
+          "duration_seconds": 5,
+          "content_group": null,
+          "available_languages": [],
+          "languages": {},
+          "artwork": {}
+        }
+      ],
+      "seasons": [
+        {
+          "season_number": 1,
+          "episodes": [
+            {
+              "id": 97,
+              "source_episode_id": "ep-1-2",
+              "episode_number": 1,
+              "title": "test episode",
+              "description": "test",
+              "duration_seconds": 22,
+              "content_group": null,
+              "available_languages": [],
+              "languages": {},
+              "artwork": {}
+            },
+            {
+              "id": 98,
+              "source_episode_id": "ep-1-3",
+              "episode_number": 2,
+              "title": "test episode 2",
+              "description": null,
+              "duration_seconds": 24,
+              "content_group": null,
+              "available_languages": [],
+              "languages": {},
+              "artwork": {}
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "show_003",
@@ -760,8 +840,8 @@
       ]
     },
     {
-      "id": "show_032",
-      "raw_id": 32,
+      "id": "show_034",
+      "raw_id": 34,
       "title": "Interstellar Chronicles: Remastered",
       "slug": "interstellar-chronicles",
       "synopsis": "Updated high-definition remaster with director's commentary.",
@@ -770,9 +850,9 @@
         "Sci-Fi Interstellar"
       ],
       "artwork": {
-        "poster": null,
-        "banner": null,
-        "thumbnail": null
+        "poster": "https://assets.peblo.test/ic/poster_600x900.jpg",
+        "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+        "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg"
       },
       "trailers": [],
       "seasons": [
@@ -780,16 +860,30 @@
           "season_number": 1,
           "episodes": [
             {
-              "id": 95,
+              "id": 99,
               "source_episode_id": "ic-s01e01-pilot",
               "episode_number": 1,
               "title": "Departure from Sol: Extended",
               "description": "The colony flagship leaves Earth orbit under quantum drive.",
               "duration_seconds": 2940,
-              "content_group": null,
-              "available_languages": [],
-              "languages": {},
-              "artwork": {}
+              "content_group": "grp_ep_99",
+              "available_languages": [
+                "en",
+                "hi"
+              ],
+              "languages": {
+                "hi": {
+                  "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
+                },
+                "en": {
+                  "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
+                }
+              },
+              "artwork": {
+                "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+                "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
+                "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
+              }
             }
           ]
         }
@@ -946,6 +1040,50 @@
                 "poster": "seed://artwork/ep_0082/poster",
                 "banner": "seed://artwork/ep_0082/banner",
                 "thumbnail": "seed://artwork/ep_0082/thumbnail"
+              }
+            },
+            {
+              "id": 65,
+              "source_episode_id": "ep_0083",
+              "episode_number": 7,
+              "title": "Grandmother's Map",
+              "description": null,
+              "duration_seconds": 660,
+              "content_group": "number-nest-s01e07",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0083"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0083/poster",
+                "banner": "seed://artwork/ep_0083/banner",
+                "thumbnail": "seed://artwork/ep_0083/thumbnail"
+              }
+            },
+            {
+              "id": 66,
+              "source_episode_id": "ep_0084",
+              "episode_number": 8,
+              "title": "The Runaway Cart",
+              "description": null,
+              "duration_seconds": 540,
+              "content_group": "number-nest-s01e08",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0084"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0084/poster",
+                "banner": "seed://artwork/ep_0084/banner",
+                "thumbnail": "seed://artwork/ep_0084/thumbnail"
               }
             }
           ]
@@ -1242,6 +1380,96 @@
           ]
         }
       ]
+    },
+    {
+      "id": "show_015",
+      "raw_id": 15,
+      "title": "UI Automated Show 1788582109735",
+      "slug": "ui-auto-1788582109735",
+      "synopsis": "E2E automated testing synopsis.",
+      "section": "series",
+      "categories": [
+        "adventure"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": []
+    },
+    {
+      "id": "show_016",
+      "raw_id": 16,
+      "title": "UI Automated Show 1788582181700 (Updated)",
+      "slug": "ui-auto-1788582181700",
+      "synopsis": "E2E automated testing synopsis.",
+      "section": "series",
+      "categories": [
+        "adventure"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": []
+    },
+    {
+      "id": "show_017",
+      "raw_id": 17,
+      "title": "UI Automated Show 1788582247951 (Updated)",
+      "slug": "ui-auto-1788582247951",
+      "synopsis": "E2E automated testing synopsis.",
+      "section": "series",
+      "categories": [
+        "adventure"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": []
+    },
+    {
+      "id": "show_018",
+      "raw_id": 18,
+      "title": "UI Automated Show 1788582343976 (Updated)",
+      "slug": "ui-auto-1788582343976",
+      "synopsis": "E2E automated testing synopsis.",
+      "section": "series",
+      "categories": [
+        "adventure"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": []
+    },
+    {
+      "id": "show_019",
+      "raw_id": 19,
+      "title": "UI Automated Show 1788582427538 (Updated)",
+      "slug": "ui-auto-1788582427538",
+      "synopsis": "E2E automated testing synopsis.",
+      "section": "series",
+      "categories": [
+        "adventure"
+      ],
+      "artwork": {
+        "poster": null,
+        "banner": null,
+        "thumbnail": null
+      },
+      "trailers": [],
+      "seasons": []
     },
     {
       "id": "show_004",
@@ -1756,6 +1984,207 @@
           ]
         }
       ]
+    },
+    {
+      "id": "show_008",
+      "raw_id": 8,
+      "title": "Rhyme Rangers",
+      "slug": "rhyme-rangers",
+      "synopsis": "A band of friends who solve problems in rhyme.",
+      "section": null,
+      "categories": [
+        "language",
+        "music"
+      ],
+      "artwork": {
+        "poster": "seed://artwork/ep_0085/poster",
+        "banner": "seed://artwork/ep_0085/banner",
+        "thumbnail": "seed://artwork/ep_0085/thumbnail"
+      },
+      "trailers": [],
+      "seasons": [
+        {
+          "season_number": 1,
+          "episodes": [
+            {
+              "id": 67,
+              "source_episode_id": "ep_0085",
+              "episode_number": 1,
+              "title": "The Lost Kite",
+              "description": null,
+              "duration_seconds": 510,
+              "content_group": "rhyme-rangers-s01e01",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0085"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0085/poster",
+                "banner": "seed://artwork/ep_0085/banner",
+                "thumbnail": "seed://artwork/ep_0085/thumbnail"
+              }
+            },
+            {
+              "id": 68,
+              "source_episode_id": "ep_0086",
+              "episode_number": 2,
+              "title": "Rain on the Roof",
+              "description": null,
+              "duration_seconds": 600,
+              "content_group": "rhyme-rangers-s01e02",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0086"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0086/poster",
+                "banner": "seed://artwork/ep_0086/banner",
+                "thumbnail": "seed://artwork/ep_0086/thumbnail"
+              }
+            },
+            {
+              "id": 69,
+              "source_episode_id": "ep_0087",
+              "episode_number": 3,
+              "title": "A Bridge of Stones",
+              "description": null,
+              "duration_seconds": 420,
+              "content_group": "rhyme-rangers-s01e03",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0087"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0087/poster",
+                "banner": "seed://artwork/ep_0087/banner",
+                "thumbnail": "seed://artwork/ep_0087/thumbnail"
+              }
+            },
+            {
+              "id": 70,
+              "source_episode_id": "ep_0088",
+              "episode_number": 4,
+              "title": "The Midnight Market",
+              "description": null,
+              "duration_seconds": 420,
+              "content_group": "rhyme-rangers-s01e04",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0088"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0088/poster",
+                "banner": "seed://artwork/ep_0088/banner",
+                "thumbnail": "seed://artwork/ep_0088/thumbnail"
+              }
+            },
+            {
+              "id": 71,
+              "source_episode_id": "ep_0089",
+              "episode_number": 5,
+              "title": "Footprints in Flour",
+              "description": null,
+              "duration_seconds": 600,
+              "content_group": "rhyme-rangers-s01e05",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0089"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0089/poster",
+                "banner": "seed://artwork/ep_0089/banner",
+                "thumbnail": "seed://artwork/ep_0089/thumbnail"
+              }
+            },
+            {
+              "id": 72,
+              "source_episode_id": "ep_0090",
+              "episode_number": 6,
+              "title": "The Whistling Well",
+              "description": null,
+              "duration_seconds": 540,
+              "content_group": "rhyme-rangers-s01e06",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0090"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0090/poster",
+                "banner": "seed://artwork/ep_0090/banner",
+                "thumbnail": "seed://artwork/ep_0090/thumbnail"
+              }
+            },
+            {
+              "id": 73,
+              "source_episode_id": "ep_0091",
+              "episode_number": 7,
+              "title": "Grandmother's Map",
+              "description": null,
+              "duration_seconds": 480,
+              "content_group": "rhyme-rangers-s01e07",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0091"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0091/poster",
+                "banner": "seed://artwork/ep_0091/banner",
+                "thumbnail": "seed://artwork/ep_0091/thumbnail"
+              }
+            },
+            {
+              "id": 74,
+              "source_episode_id": "ep_0092",
+              "episode_number": 8,
+              "title": "The Runaway Cart",
+              "description": null,
+              "duration_seconds": 510,
+              "content_group": "rhyme-rangers-s01e08",
+              "available_languages": [
+                "en"
+              ],
+              "languages": {
+                "en": {
+                  "video_uri": "seed://video/ep_0092"
+                }
+              },
+              "artwork": {
+                "poster": "seed://artwork/ep_0092/poster",
+                "banner": "seed://artwork/ep_0092/banner",
+                "thumbnail": "seed://artwork/ep_0092/thumbnail"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "sections": {
@@ -2052,8 +2481,45 @@
         ]
       },
       {
-        "id": "show_025",
-        "raw_id": 25,
+        "id": "show_022",
+        "raw_id": 22,
+        "title": "Professor paws and the cloud cat",
+        "slug": "propessor-paws",
+        "synopsis": "Main Characters: Professor paws and a playful cat\nThe setting: a cozy treehouse\nThe adventure: Everyday\nThe goal: They help other animals",
+        "section": "featured",
+        "categories": [
+          "adventure",
+          "friendship"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": [
+          {
+            "season_number": 1,
+            "episodes": [
+              {
+                "id": 85,
+                "source_episode_id": "ep-1-1",
+                "episode_number": 1,
+                "title": "Something",
+                "description": null,
+                "duration_seconds": null,
+                "content_group": null,
+                "available_languages": [],
+                "languages": {},
+                "artwork": {}
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "show_033",
+        "raw_id": 33,
         "title": "Test Show",
         "slug": "test-show",
         "synopsis": "Test Show",
@@ -2066,8 +2532,252 @@
           "banner": null,
           "thumbnail": null
         },
+        "trailers": [
+          {
+            "id": 96,
+            "source_episode_id": "ep-0-1",
+            "episode_number": 1,
+            "title": "Trailer",
+            "description": "test trailer",
+            "duration_seconds": 5,
+            "content_group": null,
+            "available_languages": [],
+            "languages": {},
+            "artwork": {}
+          }
+        ],
+        "seasons": [
+          {
+            "season_number": 1,
+            "episodes": [
+              {
+                "id": 97,
+                "source_episode_id": "ep-1-2",
+                "episode_number": 1,
+                "title": "test episode",
+                "description": "test",
+                "duration_seconds": 22,
+                "content_group": null,
+                "available_languages": [],
+                "languages": {},
+                "artwork": {}
+              },
+              {
+                "id": 98,
+                "source_episode_id": "ep-1-3",
+                "episode_number": 2,
+                "title": "test episode 2",
+                "description": null,
+                "duration_seconds": 24,
+                "content_group": null,
+                "available_languages": [],
+                "languages": {},
+                "artwork": {}
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "show_008",
+        "raw_id": 8,
+        "title": "Rhyme Rangers",
+        "slug": "rhyme-rangers",
+        "synopsis": "A band of friends who solve problems in rhyme.",
+        "section": null,
+        "categories": [
+          "language",
+          "music"
+        ],
+        "artwork": {
+          "poster": "seed://artwork/ep_0085/poster",
+          "banner": "seed://artwork/ep_0085/banner",
+          "thumbnail": "seed://artwork/ep_0085/thumbnail"
+        },
         "trailers": [],
-        "seasons": []
+        "seasons": [
+          {
+            "season_number": 1,
+            "episodes": [
+              {
+                "id": 67,
+                "source_episode_id": "ep_0085",
+                "episode_number": 1,
+                "title": "The Lost Kite",
+                "description": null,
+                "duration_seconds": 510,
+                "content_group": "rhyme-rangers-s01e01",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0085"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0085/poster",
+                  "banner": "seed://artwork/ep_0085/banner",
+                  "thumbnail": "seed://artwork/ep_0085/thumbnail"
+                }
+              },
+              {
+                "id": 68,
+                "source_episode_id": "ep_0086",
+                "episode_number": 2,
+                "title": "Rain on the Roof",
+                "description": null,
+                "duration_seconds": 600,
+                "content_group": "rhyme-rangers-s01e02",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0086"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0086/poster",
+                  "banner": "seed://artwork/ep_0086/banner",
+                  "thumbnail": "seed://artwork/ep_0086/thumbnail"
+                }
+              },
+              {
+                "id": 69,
+                "source_episode_id": "ep_0087",
+                "episode_number": 3,
+                "title": "A Bridge of Stones",
+                "description": null,
+                "duration_seconds": 420,
+                "content_group": "rhyme-rangers-s01e03",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0087"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0087/poster",
+                  "banner": "seed://artwork/ep_0087/banner",
+                  "thumbnail": "seed://artwork/ep_0087/thumbnail"
+                }
+              },
+              {
+                "id": 70,
+                "source_episode_id": "ep_0088",
+                "episode_number": 4,
+                "title": "The Midnight Market",
+                "description": null,
+                "duration_seconds": 420,
+                "content_group": "rhyme-rangers-s01e04",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0088"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0088/poster",
+                  "banner": "seed://artwork/ep_0088/banner",
+                  "thumbnail": "seed://artwork/ep_0088/thumbnail"
+                }
+              },
+              {
+                "id": 71,
+                "source_episode_id": "ep_0089",
+                "episode_number": 5,
+                "title": "Footprints in Flour",
+                "description": null,
+                "duration_seconds": 600,
+                "content_group": "rhyme-rangers-s01e05",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0089"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0089/poster",
+                  "banner": "seed://artwork/ep_0089/banner",
+                  "thumbnail": "seed://artwork/ep_0089/thumbnail"
+                }
+              },
+              {
+                "id": 72,
+                "source_episode_id": "ep_0090",
+                "episode_number": 6,
+                "title": "The Whistling Well",
+                "description": null,
+                "duration_seconds": 540,
+                "content_group": "rhyme-rangers-s01e06",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0090"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0090/poster",
+                  "banner": "seed://artwork/ep_0090/banner",
+                  "thumbnail": "seed://artwork/ep_0090/thumbnail"
+                }
+              },
+              {
+                "id": 73,
+                "source_episode_id": "ep_0091",
+                "episode_number": 7,
+                "title": "Grandmother's Map",
+                "description": null,
+                "duration_seconds": 480,
+                "content_group": "rhyme-rangers-s01e07",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0091"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0091/poster",
+                  "banner": "seed://artwork/ep_0091/banner",
+                  "thumbnail": "seed://artwork/ep_0091/thumbnail"
+                }
+              },
+              {
+                "id": 74,
+                "source_episode_id": "ep_0092",
+                "episode_number": 8,
+                "title": "The Runaway Cart",
+                "description": null,
+                "duration_seconds": 510,
+                "content_group": "rhyme-rangers-s01e08",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0092"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0092/poster",
+                  "banner": "seed://artwork/ep_0092/banner",
+                  "thumbnail": "seed://artwork/ep_0092/thumbnail"
+                }
+              }
+            ]
+          }
+        ]
       }
     ],
     "series": [
@@ -2273,8 +2983,8 @@
         ]
       },
       {
-        "id": "show_032",
-        "raw_id": 32,
+        "id": "show_034",
+        "raw_id": 34,
         "title": "Interstellar Chronicles: Remastered",
         "slug": "interstellar-chronicles",
         "synopsis": "Updated high-definition remaster with director's commentary.",
@@ -2283,9 +2993,9 @@
           "Sci-Fi Interstellar"
         ],
         "artwork": {
-          "poster": null,
-          "banner": null,
-          "thumbnail": null
+          "poster": "https://assets.peblo.test/ic/poster_600x900.jpg",
+          "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+          "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg"
         },
         "trailers": [],
         "seasons": [
@@ -2293,16 +3003,30 @@
             "season_number": 1,
             "episodes": [
               {
-                "id": 95,
+                "id": 99,
                 "source_episode_id": "ic-s01e01-pilot",
                 "episode_number": 1,
                 "title": "Departure from Sol: Extended",
                 "description": "The colony flagship leaves Earth orbit under quantum drive.",
                 "duration_seconds": 2940,
-                "content_group": null,
-                "available_languages": [],
-                "languages": {},
-                "artwork": {}
+                "content_group": "grp_ep_99",
+                "available_languages": [
+                  "en",
+                  "hi"
+                ],
+                "languages": {
+                  "hi": {
+                    "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
+                  },
+                  "en": {
+                    "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
+                  }
+                },
+                "artwork": {
+                  "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+                  "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
+                  "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
+                }
               }
             ]
           }
@@ -2459,6 +3183,50 @@
                   "poster": "seed://artwork/ep_0082/poster",
                   "banner": "seed://artwork/ep_0082/banner",
                   "thumbnail": "seed://artwork/ep_0082/thumbnail"
+                }
+              },
+              {
+                "id": 65,
+                "source_episode_id": "ep_0083",
+                "episode_number": 7,
+                "title": "Grandmother's Map",
+                "description": null,
+                "duration_seconds": 660,
+                "content_group": "number-nest-s01e07",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0083"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0083/poster",
+                  "banner": "seed://artwork/ep_0083/banner",
+                  "thumbnail": "seed://artwork/ep_0083/thumbnail"
+                }
+              },
+              {
+                "id": 66,
+                "source_episode_id": "ep_0084",
+                "episode_number": 8,
+                "title": "The Runaway Cart",
+                "description": null,
+                "duration_seconds": 540,
+                "content_group": "number-nest-s01e08",
+                "available_languages": [
+                  "en"
+                ],
+                "languages": {
+                  "en": {
+                    "video_uri": "seed://video/ep_0084"
+                  }
+                },
+                "artwork": {
+                  "poster": "seed://artwork/ep_0084/poster",
+                  "banner": "seed://artwork/ep_0084/banner",
+                  "thumbnail": "seed://artwork/ep_0084/thumbnail"
                 }
               }
             ]
@@ -2755,6 +3523,96 @@
             ]
           }
         ]
+      },
+      {
+        "id": "show_015",
+        "raw_id": 15,
+        "title": "UI Automated Show 1788582109735",
+        "slug": "ui-auto-1788582109735",
+        "synopsis": "E2E automated testing synopsis.",
+        "section": "series",
+        "categories": [
+          "adventure"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": []
+      },
+      {
+        "id": "show_016",
+        "raw_id": 16,
+        "title": "UI Automated Show 1788582181700 (Updated)",
+        "slug": "ui-auto-1788582181700",
+        "synopsis": "E2E automated testing synopsis.",
+        "section": "series",
+        "categories": [
+          "adventure"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": []
+      },
+      {
+        "id": "show_017",
+        "raw_id": 17,
+        "title": "UI Automated Show 1788582247951 (Updated)",
+        "slug": "ui-auto-1788582247951",
+        "synopsis": "E2E automated testing synopsis.",
+        "section": "series",
+        "categories": [
+          "adventure"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": []
+      },
+      {
+        "id": "show_018",
+        "raw_id": 18,
+        "title": "UI Automated Show 1788582343976 (Updated)",
+        "slug": "ui-auto-1788582343976",
+        "synopsis": "E2E automated testing synopsis.",
+        "section": "series",
+        "categories": [
+          "adventure"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": []
+      },
+      {
+        "id": "show_019",
+        "raw_id": 19,
+        "title": "UI Automated Show 1788582427538 (Updated)",
+        "slug": "ui-auto-1788582427538",
+        "synopsis": "E2E automated testing synopsis.",
+        "section": "series",
+        "categories": [
+          "adventure"
+        ],
+        "artwork": {
+          "poster": null,
+          "banner": null,
+          "thumbnail": null
+        },
+        "trailers": [],
+        "seasons": []
       }
     ],
     "minisodes": [

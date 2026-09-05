@@ -141,12 +141,6 @@ async def create_episode(
     await db.commit()
     await db.refresh(episode)
 
-    if episode.status == EpisodeStatus.PUBLISHED and current_user.role == UserRole.ADMIN:
-        try:
-            await sync_published_catalogue(db, current_user.id)
-        except Exception:
-            pass
-
     return episode
 
 
@@ -230,12 +224,6 @@ async def update_episode(
 
     await db.commit()
     await db.refresh(episode)
-
-    if episode.status == EpisodeStatus.PUBLISHED and current_user.role == UserRole.ADMIN:
-        try:
-            await sync_published_catalogue(db, current_user.id)
-        except Exception:
-            pass
 
     return episode
 
