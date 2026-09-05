@@ -89,13 +89,24 @@ async def create_show(
             detail="A show with this slug already exists",
         )
 
+    # Determine show status
+    initial_status = ShowStatus.DRAFT
+    if data.status:
+        try:
+            initial_status = ShowStatus(data.status)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid show status: '{data.status}'",
+            )
+
     # Create show
     show = Show(
         title=data.title,
         slug=data.slug,
         synopsis=data.synopsis,
         section=data.section,
-        status=ShowStatus.DRAFT,
+        status=initial_status,
         categories=[],
     )
 

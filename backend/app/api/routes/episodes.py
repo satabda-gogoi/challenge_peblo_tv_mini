@@ -116,6 +116,16 @@ async def create_episode(
                 detail="An episode with this source_episode_id already exists",
             )
 
+    initial_status = EpisodeStatus.DRAFT
+    if data.status:
+        try:
+            initial_status = EpisodeStatus(data.status)
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid episode status: '{data.status}'",
+            )
+
     episode = Episode(
         season_id=season_id,
         source_episode_id=data.source_episode_id,
@@ -123,7 +133,7 @@ async def create_episode(
         title=data.title,
         description=data.description,
         duration_seconds=data.duration_seconds,
-        status=EpisodeStatus.DRAFT,
+        status=initial_status,
     )
 
     db.add(episode)

@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-05T05:58:12.654884+00:00",
+  "generated_at": "2026-09-05T13:01:23.709732+00:00",
   "version": 1,
-  "shows_count": 7,
+  "shows_count": 8,
   "shows": [
     {
       "id": "show_001",
@@ -735,6 +735,56 @@
                 "poster": "seed://artwork/ep_0076/poster",
                 "banner": "seed://artwork/ep_0076/banner",
                 "thumbnail": "seed://artwork/ep_0076/thumbnail"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "show_024",
+      "raw_id": 24,
+      "title": "Interstellar Chronicles: Remastered",
+      "slug": "interstellar-chronicles",
+      "synopsis": "Updated high-definition remaster with director's commentary.",
+      "section": "series",
+      "categories": [
+        "Sci-Fi Interstellar"
+      ],
+      "artwork": {
+        "poster": "https://assets.peblo.test/ic/poster_600x900.jpg",
+        "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+        "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg"
+      },
+      "trailers": [],
+      "seasons": [
+        {
+          "season_number": 1,
+          "episodes": [
+            {
+              "id": 86,
+              "source_episode_id": "ic-s01e01-pilot",
+              "episode_number": 1,
+              "title": "Departure from Sol: Extended",
+              "description": "The colony flagship leaves Earth orbit under quantum drive.",
+              "duration_seconds": 2940,
+              "content_group": "grp_ep_86",
+              "available_languages": [
+                "en",
+                "hi"
+              ],
+              "languages": {
+                "hi": {
+                  "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
+                },
+                "en": {
+                  "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
+                }
+              },
+              "artwork": {
+                "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+                "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
+                "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
               }
             }
           ]
@@ -2194,6 +2244,56 @@
                   "poster": "seed://artwork/ep_0076/poster",
                   "banner": "seed://artwork/ep_0076/banner",
                   "thumbnail": "seed://artwork/ep_0076/thumbnail"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "show_024",
+        "raw_id": 24,
+        "title": "Interstellar Chronicles: Remastered",
+        "slug": "interstellar-chronicles",
+        "synopsis": "Updated high-definition remaster with director's commentary.",
+        "section": "series",
+        "categories": [
+          "Sci-Fi Interstellar"
+        ],
+        "artwork": {
+          "poster": "https://assets.peblo.test/ic/poster_600x900.jpg",
+          "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+          "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg"
+        },
+        "trailers": [],
+        "seasons": [
+          {
+            "season_number": 1,
+            "episodes": [
+              {
+                "id": 86,
+                "source_episode_id": "ic-s01e01-pilot",
+                "episode_number": 1,
+                "title": "Departure from Sol: Extended",
+                "description": "The colony flagship leaves Earth orbit under quantum drive.",
+                "duration_seconds": 2940,
+                "content_group": "grp_ep_86",
+                "available_languages": [
+                  "en",
+                  "hi"
+                ],
+                "languages": {
+                  "hi": {
+                    "video_uri": "https://stream.peblo.test/ic/s01e01_hi.m3u8"
+                  },
+                  "en": {
+                    "video_uri": "https://stream.peblo.test/ic/s01e01_en_hd.m3u8"
+                  }
+                },
+                "artwork": {
+                  "banner": "https://assets.peblo.test/ic/banner_1280x720.jpg",
+                  "thumbnail": "https://assets.peblo.test/ic/thumb_640x360.jpg",
+                  "poster": "https://assets.peblo.test/ic/poster_600x900.jpg"
                 }
               }
             ]

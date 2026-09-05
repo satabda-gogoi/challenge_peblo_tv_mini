@@ -12,6 +12,7 @@ class ShowBase(BaseModel):
 
 class ShowCreate(ShowBase):
     category_ids: list[int] = Field(default_factory=list)
+    status: str | None = None
 
 
 class ShowUpdate(BaseModel):

@@ -11,6 +11,7 @@ import {
   Layers,
   X,
   AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 
 import { getShows, getShow, updateShow, type Show } from "../api/shows";
@@ -24,6 +25,7 @@ import {
   createEpisode,
   deleteEpisode,
   getEpisodes,
+  updateEpisode,
   type Episode,
 } from "../api/episodes";
 
@@ -46,6 +48,7 @@ export default function ShowDetails() {
   const [editSlug, setEditSlug] = useState("");
   const [editSynopsis, setEditSynopsis] = useState("");
   const [editSection, setEditSection] = useState("");
+  const [editStatus, setEditStatus] = useState("draft");
 
   // Add Season Dialog
   const [showAddSeasonModal, setShowAddSeasonModal] = useState(false);
@@ -58,6 +61,7 @@ export default function ShowDetails() {
   const [epTitle, setEpTitle] = useState("");
   const [epDescription, setEpDescription] = useState("");
   const [epDuration, setEpDuration] = useState("");
+  const [epStatus, setEpStatus] = useState("published");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -86,6 +90,7 @@ export default function ShowDetails() {
       setEditSlug(currentShow.slug);
       setEditSynopsis(currentShow.synopsis || "");
       setEditSection(currentShow.section || "");
+      setEditStatus(currentShow.status);
 
       const seasonData = await getSeasons(showId);
       const seasonsWithEpisodes = await Promise.all(
@@ -124,6 +129,36 @@ export default function ShowDetails() {
   }, [showId]);
 
   const activeSeason = seasons.find((s) => s.id === selectedSeasonId) || seasons[0] || null;
+
+  async function handleToggleShowStatus() {
+    if (!show) return;
+    const nextStatus = show.status === "published" ? "draft" : "published";
+    try {
+      setSaving(true);
+      await updateShow(show.id, { status: nextStatus });
+      await loadData();
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { detail?: string } } })?.response?.data
+          ?.detail || "Failed to update show status.";
+      setError(msg);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleToggleEpisodeStatus(episode: Episode) {
+    const nextStatus = episode.status === "published" ? "draft" : "published";
+    try {
+      await updateEpisode(episode.id, { status: nextStatus });
+      await loadData();
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { detail?: string } } })?.response?.data
+          ?.detail || "Failed to update episode status.";
+      setError(msg);
+    }
+  }
 
   async function handleCreateSeason(e: React.FormEvent) {
     e.preventDefault();
@@ -175,13 +210,14 @@ export default function ShowDetails() {
         title: epTitle.trim(),
         description: epDescription.trim() || null,
         duration_seconds: epDuration ? Number(epDuration) : null,
-        status: "draft",
+        status: epStatus,
       });
 
       setEpSourceId("");
       setEpTitle("");
       setEpDescription("");
       setEpDuration("");
+      setEpStatus("published");
       setEpNumber(String((activeSeason.episodes.length || 0) + 2));
       setShowAddEpisodeModal(false);
 
@@ -246,6 +282,7 @@ export default function ShowDetails() {
         slug: editSlug.trim(),
         synopsis: editSynopsis.trim() || null,
         section: editSection || null,
+        status: editStatus,
       });
 
       setEditingShow(false);
@@ -307,15 +344,27 @@ export default function ShowDetails() {
             <div>
               <div className="flex items-center gap-2.5">
                 <h1 className="text-2xl font-bold tracking-tight text-slate-900">{show.title}</h1>
-                <span
-                  className={`px-2.5 py-0.5 text-xs font-semibold rounded-full border capitalize ${
+                <button
+                  type="button"
+                  onClick={handleToggleShowStatus}
+                  disabled={saving}
+                  title={`Click to switch show to ${show.status === "published" ? "draft" : "published"}`}
+                  className={`px-3 py-1 text-xs font-bold rounded-full border transition inline-flex items-center gap-1.5 cursor-pointer shadow-xs ${
                     show.status === "published"
-                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                      : "bg-amber-50 text-amber-700 border-amber-200"
+                      ? "bg-emerald-600 text-white hover:bg-emerald-700 border-emerald-700"
+                      : "bg-amber-100 text-amber-900 hover:bg-amber-200 border-amber-300"
                   }`}
                 >
-                  {show.status}
-                </span>
+                  {show.status === "published" ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Published (Live)
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="w-3.5 h-3.5 text-amber-700" /> Draft (Click to Publish)
+                    </>
+                  )}
+                </button>
               </div>
               <p className="text-sm text-slate-500 mt-0.5">/{show.slug}</p>
             </div>
@@ -363,7 +412,7 @@ export default function ShowDetails() {
           </div>
 
           <form onSubmit={handleUpdateShow} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1.5">Show Title</label>
                 <input
@@ -398,6 +447,18 @@ export default function ShowDetails() {
                   <option value="series">Series</option>
                   <option value="minisodes">Minisodes</option>
                   <option value="songs">Songs</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1.5">Status</label>
+                <select
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  value={editStatus}
+                  onChange={(e) => setEditStatus(e.target.value)}
+                >
+                  <option value="published">Published (Live Catalogue)</option>
+                  <option value="draft">Draft (Work in Progress)</option>
                 </select>
               </div>
             </div>
@@ -491,7 +552,7 @@ export default function ShowDetails() {
                   }`}
                 >
                   <Layers className={`w-4 h-4 ${isActive ? "text-indigo-600" : "text-slate-400"}`} />
-                  <span>Season {season.season_number}</span>
+                  <span>{season.season_number === 0 ? "Season 0 (Trailers & Teasers)" : `Season ${season.season_number}`}</span>
                   <span
                     className={`px-1.5 py-0.5 text-xs rounded-full ${
                       isActive ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-500"
@@ -521,14 +582,21 @@ export default function ShowDetails() {
             {/* Season Toolbar Header */}
             <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                  Season {activeSeason.season_number}
+                <h2 className="text-lg font-bold text-slate-900 flex flex-wrap items-center gap-2">
+                  {activeSeason.season_number === 0 ? "Season 0 (Trailers & Teasers)" : `Season ${activeSeason.season_number}`}
+                  {activeSeason.season_number === 0 && (
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                      Trailers Only • Excluded from regular public seasons
+                    </span>
+                  )}
                   <span className="text-xs font-normal text-slate-500">
                     • {activeSeason.episodes.length} episode{activeSeason.episodes.length !== 1 ? "s" : ""}
                   </span>
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Manage episodes, video streams, artwork, and validation for this season.
+                  {activeSeason.season_number === 0
+                    ? "Season 0 is reserved for promotional trailers and teasers. These appear in the public viewer's Trailers rail, never as a regular series season."
+                    : "Manage episodes, video streams, artwork, and validation for this season."}
                 </p>
               </div>
 
@@ -555,24 +623,29 @@ export default function ShowDetails() {
               </div>
             </div>
 
-            {/* COLLAPSIBLE ADD EPISODE PANEL */}
+            {/* COLLAPSIBLE ADD EPISODE MODAL */}
             {showAddEpisodeModal && (
-              <div className="p-6 bg-indigo-50/40 border-b border-indigo-100">
-                <div className="max-w-3xl">
+              <div className="p-6 bg-slate-50 border-b border-slate-200 animate-fadeIn">
+                <div className="max-w-2xl">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-indigo-900">
-                      New Episode Details
-                    </h3>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900">
+                        Add Episode to Season {activeSeason.season_number}
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        Create episode record. You can upload media and artwork in the next step.
+                      </p>
+                    </div>
                     <button
                       onClick={() => setShowAddEpisodeModal(false)}
-                      className="text-slate-400 hover:text-slate-600"
+                      className="text-slate-400 hover:text-slate-600 p-1"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
 
                   <form onSubmit={handleCreateEpisode} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1">
                           Source Episode ID *
@@ -640,6 +713,20 @@ export default function ShowDetails() {
                           onChange={(e) => setEpDuration(e.target.value)}
                         />
                       </div>
+                      
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-700 mb-1">
+                          Status
+                        </label>
+                        <select
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                          value={epStatus}
+                          onChange={(e) => setEpStatus(e.target.value)}
+                        >
+                          <option value="published">Published</option>
+                          <option value="draft">Draft</option>
+                        </select>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-2 pt-2">
@@ -697,15 +784,19 @@ export default function ShowDetails() {
                       <div>
                         <div className="flex items-center gap-2">
                           <h4 className="text-sm font-semibold text-slate-900">{episode.title}</h4>
-                          <span
-                            className={`px-2 py-0.5 text-xs font-semibold rounded-full border capitalize ${
+                          <button
+                            type="button"
+                            onClick={() => handleToggleEpisodeStatus(episode)}
+                            disabled={saving}
+                            title={`Click to switch to ${episode.status === "published" ? "draft" : "published"}`}
+                            className={`px-2 py-0.5 text-xs font-semibold rounded-full border capitalize cursor-pointer hover:opacity-85 transition ${
                               episode.status === "published"
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : "bg-amber-50 text-amber-700 border-amber-200"
                             }`}
                           >
-                            {episode.status}
-                          </span>
+                            {episode.status === "published" ? "✓ Published" : "✎ Draft"}
+                          </button>
                         </div>
 
                         <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">

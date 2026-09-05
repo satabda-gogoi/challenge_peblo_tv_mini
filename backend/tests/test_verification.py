@@ -144,8 +144,9 @@ def test_api_protection_on_all_required_endpoints():
     assert _has_dependency(categories.update_category, get_current_editor), "update_category missing editor protection"
     assert _has_dependency(categories.delete_category, get_current_editor), "delete_category missing editor protection"
 
-    # Publish endpoints
-    assert _has_dependency(publish.publish_catalogue, get_current_editor), "publish_catalogue missing editor protection"
+    # Publish endpoints (Publish requires Admin role)
+    from app.api.dependencies import get_current_admin
+    assert _has_dependency(publish.publish_catalogue, get_current_admin), "publish_catalogue missing admin protection"
     assert _has_dependency(publish.get_publish_runs, get_current_editor), "get_publish_runs missing editor protection"
     assert _has_dependency(publish.get_publish_run, get_current_editor), "get_publish_run missing editor protection"
 

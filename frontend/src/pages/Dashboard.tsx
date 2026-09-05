@@ -133,18 +133,33 @@ export default function Dashboard() {
           </button>
         </div>
 
-        <div className="dashboard-card">
-          <div>
-            <div className="card-badge">Integrity & Build</div>
-            <h3>Publishing & Validation</h3>
-            <p>
-              Run automated catalogue data integrity checks, review warnings, and publish versioned releases for viewers.
-            </p>
+        {user?.role === "admin" ? (
+          <div className="dashboard-card">
+            <div>
+              <div className="card-badge">Integrity & Build</div>
+              <h3>Publishing & Validation</h3>
+              <p>
+                Run automated catalogue data integrity checks, review warnings, and publish versioned releases for viewers.
+              </p>
+            </div>
+            <button className="primary-button" onClick={() => navigate("/publishing")}>
+              Publishing Portal <ArrowRight className="w-4 h-4 ml-1.5 inline" />
+            </button>
           </div>
-          <button className="primary-button" onClick={() => navigate("/publishing")}>
-            Publishing Portal <ArrowRight className="w-4 h-4 ml-1.5 inline" />
-          </button>
-        </div>
+        ) : (
+          <div className="dashboard-card">
+            <div>
+              <div className="card-badge">Editorial Focus</div>
+              <h3>Media & Artwork Assets</h3>
+              <p>
+                Upload and validate posters, 16:9 banners, and thumbnails, manage multilingual video streams, and prepare episode releases.
+              </p>
+            </div>
+            <button className="primary-button" onClick={() => navigate("/shows")}>
+              Browse Shows & Episodes <ArrowRight className="w-4 h-4 ml-1.5 inline" />
+            </button>
+          </div>
+        )}
 
         <div className="dashboard-card">
           <div>

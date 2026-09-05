@@ -8,6 +8,8 @@ import {
   AlertTriangle,
   ArrowRight,
   History,
+  ShieldAlert,
+  Info,
 } from "lucide-react";
 
 import {
@@ -22,9 +24,14 @@ import {
   type CatalogueValidation,
 } from "../api/catalogueValidation";
 
+import { getMe, type User } from "../api/auth";
+import { getShows, type Show } from "../api/shows";
+
 export default function Publishing() {
   const navigate = useNavigate();
 
+  const [user, setUser] = useState<User | null>(null);
+  const [allShows, setAllShows] = useState<Show[]>([]);
   const [validation, setValidation] =
     useState<CatalogueValidation | null>(null);
 
@@ -43,14 +50,18 @@ export default function Publishing() {
     try {
       setLoading(true);
 
-      const [validationData, runsData] =
+      const [validationData, runsData, userData, showsData] =
         await Promise.all([
-          validateCatalogue(),
-          getPublishRuns(),
+          validateCatalogue().catch(() => null),
+          getPublishRuns().catch(() => []),
+          getMe().catch(() => null),
+          getShows().catch(() => []),
         ]);
 
       setValidation(validationData);
       setRuns(runsData);
+      if (userData) setUser(userData);
+      setAllShows(showsData);
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data
@@ -128,6 +139,40 @@ export default function Publishing() {
     );
   }
 
+  if (!loading && user && user.role !== "admin") {
+    return (
+      <div className="page-content">
+        <div className="max-w-xl mx-auto my-12 bg-white rounded-2xl border border-slate-200 p-8 text-center shadow-xs">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-4 text-amber-600">
+            <ShieldAlert className="w-7 h-7" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 mb-2">
+            Administrator Access Required
+          </h2>
+          <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+            Publishing and catalogue deployment is restricted to administrators. As an editor, you can create shows, upload and validate artwork, and configure media streams.
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="px-4 py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition"
+            >
+              Return to Dashboard
+            </button>
+            <button
+              onClick={() => navigate("/shows")}
+              className="px-4 py-2 text-sm font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-xs"
+            >
+              Manage Shows
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const draftShows = allShows.filter((s) => s.status === "draft");
+
   const errorCount =
     validation?.shows.reduce(
       (total, show) => total + show.errors.length,
@@ -153,6 +198,27 @@ export default function Publishing() {
 
       {error && (
         <div className="error-message">{error}</div>
+      )}
+
+      {draftShows.length > 0 && (
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm flex items-start gap-3 mb-6">
+          <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <strong className="font-semibold block">
+              {draftShows.length} Show{draftShows.length !== 1 ? "s" : ""} in Draft Status
+            </strong>
+            <p className="text-xs text-amber-800 leading-relaxed">
+              Draft shows ({draftShows.map((s) => `"${s.title}"`).join(", ")}) are preserved in the CMS but omitted from the live viewer catalogue. To include a show in the public release, go to{" "}
+              <button
+                onClick={() => navigate("/shows")}
+                className="underline font-bold text-amber-950 hover:text-indigo-600 cursor-pointer"
+              >
+                Shows
+              </button>{" "}
+              and toggle its status to <strong>Published</strong>.
+            </p>
+          </div>
+        </div>
       )}
 
       {/* VALIDATION SUMMARY */}

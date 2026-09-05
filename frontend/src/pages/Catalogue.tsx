@@ -574,6 +574,8 @@ function ShowPosterCard({
     : "";
   const style = getShowGradient(show.title, show.categories);
 
+  const regularSeasonsCount = (show.seasons || []).filter((s) => s.season_number > 0).length;
+
   return (
     <button
       type="button"
@@ -650,7 +652,11 @@ function ShowPosterCard({
             {show.categories.slice(0, 2).join(" • ") || "General"}
           </span>
           <span className="shrink-0 text-[11px]">
-            {show.seasons.length} {show.seasons.length === 1 ? "Season" : "Seasons"}
+            {regularSeasonsCount > 0
+              ? `${regularSeasonsCount} ${regularSeasonsCount === 1 ? "Season" : "Seasons"}`
+              : show.trailers && show.trailers.length > 0
+              ? "Trailers"
+              : "0 Seasons"}
           </span>
         </div>
       </div>
@@ -670,14 +676,21 @@ function ShowDetailModal({
   onClose: () => void;
   onPlayStream: (data: PlayerModalData) => void;
 }) {
+  // Defensively exclude any Season 0 from regular seasons
+  const regularSeasons = useMemo(
+    () => (show.seasons || []).filter((s) => s.season_number > 0),
+    [show.seasons]
+  );
+
   const [selectedSeasonNum, setSelectedSeasonNum] = useState<number>(
-    show.seasons[0]?.season_number ?? 1
+    regularSeasons[0]?.season_number ?? 1
   );
   const [activeStreamLang, setActiveStreamLang] = useState<string>("en");
 
-  const currentSeason = show.seasons.find(
-    (s) => s.season_number === selectedSeasonNum
-  );
+  const currentSeason =
+    regularSeasons.find((s) => s.season_number === selectedSeasonNum) ||
+    regularSeasons[0] ||
+    null;
 
   const bannerUrl = show.artwork?.banner
     ? getMediaUrl(show.artwork.banner)
@@ -762,52 +775,60 @@ function ShowDetailModal({
             </div>
           )}
 
-          {/* SEASON SELECTOR TABS */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                {show.seasons.map((s) => (
-                  <button
-                    key={s.season_number}
-                    onClick={() => setSelectedSeasonNum(s.season_number)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                      selectedSeasonNum === s.season_number
-                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
-                        : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white"
-                    }`}
-                  >
-                    <Layers className="w-3.5 h-3.5" />
-                    Season {s.season_number}
-                  </button>
-                ))}
+          {/* SEASON SELECTOR TABS & EPISODES */}
+          {regularSeasons.length > 0 ? (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                  {regularSeasons.map((s) => (
+                    <button
+                      key={s.season_number}
+                      onClick={() => setSelectedSeasonNum(s.season_number)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                        selectedSeasonNum === s.season_number
+                          ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                          : "bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      }`}
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      Season {s.season_number}
+                    </button>
+                  ))}
+                </div>
+
+                <span className="text-xs text-slate-500 font-mono shrink-0">
+                  {currentSeason?.episodes.length || 0} episodes
+                </span>
               </div>
 
-              <span className="text-xs text-slate-500 font-mono shrink-0">
-                {currentSeason?.episodes.length || 0} episodes
-              </span>
+              {/* EPISODE THUMBNAIL LISTS */}
+              {currentSeason && currentSeason.episodes.length > 0 ? (
+                <div className="space-y-3">
+                  {currentSeason.episodes.map((episode) => (
+                    <EpisodeCard
+                      key={episode.episode_number}
+                      episode={episode}
+                      showTitle={show.title}
+                      isTrailer={false}
+                      activeLang={activeStreamLang}
+                      onSelectLang={setActiveStreamLang}
+                      onPlayStream={onPlayStream}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="py-8 text-center text-slate-500 text-xs">
+                  No episodes available in this season.
+                </div>
+              )}
             </div>
-
-            {/* EPISODE THUMBNAIL LISTS */}
-            {currentSeason && currentSeason.episodes.length > 0 ? (
-              <div className="space-y-3">
-                {currentSeason.episodes.map((episode) => (
-                  <EpisodeCard
-                    key={episode.episode_number}
-                    episode={episode}
-                    showTitle={show.title}
-                    isTrailer={false}
-                    activeLang={activeStreamLang}
-                    onSelectLang={setActiveStreamLang}
-                    onPlayStream={onPlayStream}
-                  />
-                ))}
-              </div>
-            ) : (
+          ) : (
+            (!show.trailers || show.trailers.length === 0) && (
               <div className="py-8 text-center text-slate-500 text-xs">
-                No episodes available in this season.
+                No seasons or episodes available yet.
               </div>
-            )}
-          </div>
+            )
+          )}
         </div>
       </div>
     </div>

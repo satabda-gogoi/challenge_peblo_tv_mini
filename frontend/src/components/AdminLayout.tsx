@@ -82,17 +82,19 @@ export default function AdminLayout() {
             <span>Shows</span>
           </NavLink>
 
-          <NavLink
-            to="/publishing"
-            className={({ isActive }) =>
-              `nav-link ${isActive ? "active" : ""}`
-            }
-          >
-            <span className="nav-icon">
-              <Send className="w-4 h-4" />
-            </span>
-            <span>Publishing</span>
-          </NavLink>
+          {user?.role === "admin" && (
+            <NavLink
+              to="/publishing"
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="nav-icon">
+                <Send className="w-4 h-4" />
+              </span>
+              <span>Publishing</span>
+            </NavLink>
+          )}
 
           <div className="nav-group-title">Viewer</div>
 
@@ -118,7 +120,7 @@ export default function AdminLayout() {
       </aside>
 
       <main className="admin-content">
-        <Outlet />
+        <Outlet context={{ user }} />
       </main>
     </div>
   );

@@ -23,6 +23,7 @@ export interface ShowCreate {
   synopsis?: string | null;
   section?: string | null;
   category_ids: number[];
+  status?: string;
 }
 
 export async function getShows(): Promise<Show[]> {

@@ -9,6 +9,7 @@ class EpisodeCreate(BaseModel):
     description: str | None = None
     duration_seconds: int | None = Field(default=None, ge=0)
     source_episode_id: str | None = None
+    status: str | None = None
 
 
 class EpisodeUpdate(BaseModel):

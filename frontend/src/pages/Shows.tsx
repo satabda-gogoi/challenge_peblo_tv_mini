@@ -6,6 +6,7 @@ import {
   deleteShow,
   getCategories,
   getShows,
+  updateShow,
   type Category,
   type Show,
 } from "../api/shows";
@@ -24,6 +25,7 @@ export default function Shows() {
   const [synopsis, setSynopsis] = useState("");
   const [section, setSection] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [createStatus, setCreateStatus] = useState<"draft" | "published">("published");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -58,6 +60,19 @@ export default function Shows() {
     );
   }
 
+  async function handleToggleStatus(show: Show) {
+    const nextStatus = show.status === "published" ? "draft" : "published";
+    try {
+      await updateShow(show.id, { status: nextStatus });
+      await loadData();
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { detail?: string } } })?.response?.data
+          ?.detail || "Failed to update show status.";
+      setError(msg);
+    }
+  }
+
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
 
@@ -76,6 +91,7 @@ export default function Shows() {
         synopsis: synopsis.trim() || null,
         section: section || null,
         category_ids: selectedCategories,
+        status: createStatus,
       });
 
       setTitle("");
@@ -83,6 +99,7 @@ export default function Shows() {
       setSynopsis("");
       setSection("");
       setSelectedCategories([]);
+      setCreateStatus("published");
       setShowCreateForm(false);
 
       await loadData();
@@ -196,6 +213,17 @@ export default function Shows() {
                 <option value="songs">Songs</option>
               </select>
             </div>
+
+            <div>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "13px", fontWeight: 600 }}>Initial Status</label>
+              <select
+                value={createStatus}
+                onChange={(e) => setCreateStatus(e.target.value as "draft" | "published")}
+              >
+                <option value="published">Published (Live Catalogue)</option>
+                <option value="draft">Draft (Work in Progress)</option>
+              </select>
+            </div>
           </div>
 
           <div style={{ marginBottom: "16px" }}>
@@ -282,9 +310,14 @@ export default function Shows() {
               </div>
             </div>
             <div>
-              <span className={`status-badge ${show.status}`}>
-                {show.status}
-              </span>
+              <button
+                type="button"
+                onClick={() => handleToggleStatus(show)}
+                title={`Click to switch to ${show.status === "published" ? "draft" : "published"}`}
+                className={`status-badge ${show.status} cursor-pointer hover:opacity-85 transition`}
+              >
+                {show.status === "published" ? "✓ Published" : "✎ Draft"}
+              </button>
             </div>
             <div className="table-actions">
               <button
