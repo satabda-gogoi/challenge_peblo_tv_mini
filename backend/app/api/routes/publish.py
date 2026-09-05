@@ -59,11 +59,16 @@ async def publish_catalogue(
     if not validation["valid"]:
         errors = []
 
-        for show in validation["shows"]:
-            errors.extend(
-                issue["message"] if isinstance(issue, dict) else getattr(issue, "message", str(issue))
-                for issue in show["errors"]
+        if not validation["shows"]:
+            errors.append(
+                "No published shows found. Mark at least one show as Published and add seasons and episodes before publishing."
             )
+        else:
+            for show in validation["shows"]:
+                errors.extend(
+                    issue["message"] if isinstance(issue, dict) else getattr(issue, "message", str(issue))
+                    for issue in show["errors"]
+                )
 
         publish_run.completed_at = datetime.now(timezone.utc)
         publish_run.outcome = PublishOutcome.FAILED
@@ -78,6 +83,7 @@ async def publish_catalogue(
             episodes_count=0,
             error_message=publish_run.error_message,
         )
+
 
     # Promote DB records to PUBLISHED status during Admin publish run
     from app.models import Episode, Show

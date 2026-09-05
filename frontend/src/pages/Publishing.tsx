@@ -259,20 +259,26 @@ export default function Publishing() {
 
           <strong
             className={
-              validation?.valid
+              !validation
+                ? "text-slate-500"
+                : validation.valid
                 ? "text-success"
                 : "text-danger"
             }
           >
-            {validation?.valid
+            {!validation
+              ? "Not Checked"
+              : validation.valid
               ? "Ready to Publish"
+              : validation.shows.length === 0
+              ? "No Published Shows"
               : "Needs Fixes"}
           </strong>
         </div>
 
         <div className="summary-card">
           <span>Errors</span>
-          <strong>{errorCount}</strong>
+          <strong className={errorCount > 0 ? "text-danger" : ""}>{errorCount}</strong>
         </div>
 
         <div className="summary-card">
@@ -301,18 +307,30 @@ export default function Publishing() {
             : "Validate Catalogue"}
         </button>
 
-        <button
-          className="primary-button inline-flex items-center gap-2"
-          onClick={handlePublish}
-          disabled={
-            publishing || unpublishing || !validation?.valid
-          }
-        >
-          <Upload className={`w-4 h-4 ${publishing ? "animate-bounce" : ""}`} />
-          {publishing
-            ? "Publishing..."
-            : "Publish Catalogue"}
-        </button>
+        <div className="flex flex-col gap-1">
+          <button
+            className="primary-button inline-flex items-center gap-2"
+            onClick={handlePublish}
+            disabled={
+              publishing || unpublishing || !validation?.valid
+            }
+          >
+            <Upload className={`w-4 h-4 ${publishing ? "animate-bounce" : ""}`} />
+            {publishing
+              ? "Publishing..."
+              : "Publish Catalogue"}
+          </button>
+          {validation && !validation.valid && (
+            <span className="text-xs text-slate-500">
+              {validation.shows.length === 0
+                ? "No published shows to publish"
+                : `Fix ${errorCount} error${errorCount !== 1 ? "s" : ""} to enable publishing`}
+            </span>
+          )}
+          {!validation && (
+            <span className="text-xs text-slate-500">Run validation first</span>
+          )}
+        </div>
 
         <button
           className="px-4 py-2 text-sm font-semibold rounded-xl bg-rose-600 hover:bg-rose-700 text-white transition shadow-xs inline-flex items-center gap-2 disabled:opacity-50 cursor-pointer"
@@ -395,12 +413,54 @@ export default function Publishing() {
 
       {/* VALIDATION DETAILS */}
       <div className="editor-card">
-        <h2>Validation Details</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="!mb-0">Validation Details</h2>
+          {validation && !validation.valid && (
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-100 text-rose-700 border border-rose-200">
+              {errorCount} blocking error{errorCount !== 1 ? "s" : ""} — publish disabled
+            </span>
+          )}
+          {validation && validation.valid && (
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200">
+              All checks passed
+            </span>
+          )}
+        </div>
+
+        {/* Pre-publish requirements hint */}
+        {validation && !validation.valid && (
+          <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs leading-relaxed space-y-1">
+            <p className="font-semibold">Each published show must meet ALL of these requirements before the catalogue can be published:</p>
+            <ul className="list-disc ml-4 space-y-0.5 text-rose-700">
+              <li>At least <strong>one season</strong> (season number ≥ 1)</li>
+              <li>At least <strong>one published episode</strong> in that season</li>
+              <li>Each published episode needs a <strong>positive duration</strong>, <strong>video stream</strong>, and <strong>3 artworks</strong> (poster 600×900, banner 1280×720, thumbnail 640×360)</li>
+              <li>Show must have a <strong>valid section</strong> (featured / series / minisodes / songs) and at least <strong>one category</strong></li>
+            </ul>
+            <p className="text-rose-600 mt-1">Fix the issues below, then click <strong>Validate Catalogue</strong> to re-check before publishing.</p>
+          </div>
+        )}
 
         {!validation && (
           <p className="muted">
-            Validation has not been run.
+            Validation has not been run yet. Click <strong>Validate Catalogue</strong> above to check for issues.
           </p>
+        )}
+
+        {validation && validation.shows.length === 0 && (
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-sm text-center">
+            <p className="font-medium">No published shows found.</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Mark at least one show as <strong>Published</strong> in{" "}
+              <button
+                onClick={() => navigate("/shows")}
+                className="underline text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer"
+              >
+                Shows
+              </button>{" "}
+              before running a publish.
+            </p>
+          </div>
         )}
 
         {validation?.shows.map((show) => (
@@ -409,10 +469,20 @@ export default function Publishing() {
             key={show.show_id}
           >
             <div className="validation-show-header">
-              <strong>{show.title}</strong>
+              <div className="flex items-center gap-2 flex-wrap min-w-0">
+                <strong className="truncate">{show.title}</strong>
+                {!show.valid && (
+                  <button
+                    onClick={() => navigate(`/shows/${show.show_id}`)}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline cursor-pointer whitespace-nowrap shrink-0"
+                  >
+                    Fix this show <ArrowRight className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
 
               <span
-                className={`status-badge ${
+                className={`status-badge shrink-0 ${
                   show.valid
                     ? "published"
                     : "draft"
@@ -424,18 +494,22 @@ export default function Publishing() {
               </span>
             </div>
 
-            {show.errors.map((issue, index) => (
-              <div
-                className="validation-error flex items-start gap-2"
-                key={`error-${index}`}
-              >
-                <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                <div>
-                  <strong>{issue.field}</strong>
-                  <span className="block">{issue.message}</span>
-                </div>
+            {show.errors.length > 0 && (
+              <div className="mt-2 space-y-1.5">
+                {show.errors.map((issue, index) => (
+                  <div
+                    className="validation-error flex items-start gap-2"
+                    key={`error-${index}`}
+                  >
+                    <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-xs font-bold text-rose-700 uppercase tracking-wide">{issue.field}</strong>
+                      <span className="block text-sm">{issue.message}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
 
             {show.warnings.map((issue, index) => (
               <div
@@ -444,8 +518,8 @@ export default function Publishing() {
               >
                 <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                 <div>
-                  <strong>{issue.field}</strong>
-                  <span className="block">{issue.message}</span>
+                  <strong className="text-xs font-bold text-amber-700 uppercase tracking-wide">{issue.field}</strong>
+                  <span className="block text-sm">{issue.message}</span>
                 </div>
               </div>
             ))}

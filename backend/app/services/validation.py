@@ -488,10 +488,11 @@ async def validate_all(
         )
 
     return {
-        "valid": len(all_errors) == 0,
+        "valid": len(all_errors) == 0 and len(validated_shows) > 0,
         "shows": validated_shows,
         "errors": all_errors,
     }
+
 
 
 async def get_validation_report(db: AsyncSession) -> dict:
